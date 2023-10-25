@@ -5,7 +5,7 @@ Feature: Workspace
     Given header Content-Type = application/json
     And header Accept = */*
     And header x-api-key = MDQ2NWMzMDQtMGEwYy00NDA0LWFlYWQtMmVmZTYyM2Y4ZjM4
-    Given base url https://api.clockify.me/api
+    Given base url env.base_url_clockify
 
   Scenario Outline: Crear un workspace
     Given endpoint /v1/workspaces
