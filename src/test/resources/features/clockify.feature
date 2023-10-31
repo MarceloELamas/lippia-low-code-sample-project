@@ -24,10 +24,25 @@ Feature: Workspace
     Then the status code should be 200
     * define idWorkspace = $.[5].id
 
-  @test
+
   Scenario: Obtener todos los proyectos por idWorkspace
     Given call clockify.feature@GetWorkspaces
     Given endpoint /v1/workspaces/{{idWorkspace}}/projects
     When execute method GET
     Then the status code should be 200
     And response should be $.[0].id = 653870f6ebc39b75386e105e
+  @test
+  Scenario Outline: Agregar nuevo proyecto a Workspace
+    Given call clockify.feature@GetWorkspaces
+    Given endpoint /v1/workspaces/{{idWorkspace}}/projects
+    And set value "<nameProyect>" of key name in body addProyectWorkspace.json
+    When execute method POST
+    Then the status code should be 201
+    And response should be $.name = <nameProyect>
+
+    Examples:
+      | nameProyect |
+      | Proyecto9   |
+      | Proyecto10   |
+
+
