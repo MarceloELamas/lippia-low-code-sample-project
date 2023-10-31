@@ -7,6 +7,7 @@ Feature: Workspace
     And header x-api-key = MDQ2NWMzMDQtMGEwYy00NDA0LWFlYWQtMmVmZTYyM2Y4ZjM4
     Given base url env.base_url_clockify
 
+  @createWorkspace
   Scenario Outline: Crear un workspace
     Given endpoint /v1/workspaces
     And set value <nameWorkspace> of key name in body createWorkspace.json
@@ -24,7 +25,7 @@ Feature: Workspace
     Then the status code should be 200
     * define idWorkspace = $.[5].id
 
-
+  @getAllProyects
   Scenario: Obtener todos los proyectos por idWorkspace
     Given call clockify.feature@GetWorkspaces
     Given endpoint /v1/workspaces/{{idWorkspace}}/projects
@@ -44,9 +45,9 @@ Feature: Workspace
 
     Examples:
       | nameProyect |
-      | Proyecto16  |
+      | Proyecto18  |
 
-
+  @getProyect
   Scenario: Obtener proyecto existente
     Given call clockify.feature@GetWorkspaces
     Given call clockify.feature@CreateProyect
@@ -55,7 +56,7 @@ Feature: Workspace
     Then the status code should be 200
     And response should be $.id = {{idProyect}}
 
-
+  @updateProyect
   Scenario: Modificar proyecto existente
     Given call clockify.feature@GetWorkspaces
     Given call clockify.feature@CreateProyect
@@ -63,7 +64,18 @@ Feature: Workspace
     And body updateProyect.json
     When execute method PUT
     Then the status code should be 200
-    And response should be $.archived = false
+    And response should be $.archived = true
+
+  @deleteProyect
+  Scenario: Eliminar proyecto existente
+    Given call clockify.feature@updateProyect
+    Given endpoint /v1/workspaces/{{idWorkspace}}/projects/{{idProyect}}
+    When execute method DELETE
+    Then the status code should be 200
+    And response should be $.id = {{idProyect}}
+    #Este test corre @getWorkspace, @CreateProyect,y @UpdateProyect
+
+
 
 
 
