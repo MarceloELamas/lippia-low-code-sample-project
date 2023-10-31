@@ -31,7 +31,8 @@ Feature: Workspace
     When execute method GET
     Then the status code should be 200
     And response should be $.[0].id = 653870f6ebc39b75386e105e
-  @test
+
+  @CreateProyect
   Scenario Outline: Agregar nuevo proyecto a Workspace
     Given call clockify.feature@GetWorkspaces
     Given endpoint /v1/workspaces/{{idWorkspace}}/projects
@@ -39,10 +40,33 @@ Feature: Workspace
     When execute method POST
     Then the status code should be 201
     And response should be $.name = <nameProyect>
+    * define idProyect = $.id
 
     Examples:
       | nameProyect |
-      | Proyecto9   |
-      | Proyecto10   |
+      | Proyecto16  |
+
+
+  Scenario: Obtener proyecto existente
+    Given call clockify.feature@GetWorkspaces
+    Given call clockify.feature@CreateProyect
+    Given endpoint /v1/workspaces/{{idWorkspace}}/projects/{{idProyect}}
+    When execute method GET
+    Then the status code should be 200
+    And response should be $.id = {{idProyect}}
+
+
+  Scenario: Modificar proyecto existente
+    Given call clockify.feature@GetWorkspaces
+    Given call clockify.feature@CreateProyect
+    Given endpoint /v1/workspaces/{{idWorkspace}}/projects/{{idProyect}}
+    And body updateProyect.json
+    When execute method PUT
+    Then the status code should be 200
+    And response should be $.archived = false
+
+
+
+
 
 
