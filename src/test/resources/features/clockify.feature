@@ -47,7 +47,7 @@ Feature: Workspace
       | nameProyect |
       | Proyecto18  |
 
-  @getProyect
+  @getProyect #en otro feature
   Scenario: Obtener proyecto existente
     Given call clockify.feature@GetWorkspaces
     Given call clockify.feature@CreateProyect
@@ -56,7 +56,7 @@ Feature: Workspace
     Then the status code should be 200
     And response should be $.id = {{idProyect}}
 
-  @updateProyect
+  @updateProyectAux #no borrar
   Scenario: Modificar proyecto existente
     Given call clockify.feature@GetWorkspaces
     Given call clockify.feature@CreateProyect
@@ -68,7 +68,7 @@ Feature: Workspace
 
   @deleteProyect
   Scenario: Eliminar proyecto existente
-    Given call clockify.feature@updateProyect
+    Given call clockify.feature@updateProyectAux
     Given endpoint /v1/workspaces/{{idWorkspace}}/projects/{{idProyect}}
     When execute method DELETE
     Then the status code should be 200
