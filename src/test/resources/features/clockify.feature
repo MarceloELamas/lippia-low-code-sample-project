@@ -25,7 +25,7 @@ Feature: Workspace
     Then the status code should be 200
     * define idWorkspace = $.[5].id
 
-  @getAllProyects
+  @getAllProyects #En otro feature
   Scenario: Obtener todos los proyectos por idWorkspace
     Given call clockify.feature@GetWorkspaces
     Given endpoint /v1/workspaces/{{idWorkspace}}/projects
