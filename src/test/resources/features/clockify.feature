@@ -33,7 +33,7 @@ Feature: Workspace
     Then the status code should be 200
     And response should be $.[0].id = 653870f6ebc39b75386e105e
 
-  @CreateProyect
+  @CreateProyect #En Otro Feature
   Scenario Outline: Agregar nuevo proyecto a Workspace
     Given call clockify.feature@GetWorkspaces
     Given endpoint /v1/workspaces/{{idWorkspace}}/projects
