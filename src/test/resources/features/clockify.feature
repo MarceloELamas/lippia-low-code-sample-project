@@ -25,55 +25,24 @@ Feature: Workspace
     Then the status code should be 200
     * define idWorkspace = $.[5].id
 
-  @getAllProyects #En otro feature
-  Scenario: Obtener todos los proyectos por idWorkspace
+  @CreateProyectAux
+  Scenario: Agregar nuevo proyecto a Workspace
     Given call clockify.feature@GetWorkspaces
     Given endpoint /v1/workspaces/{{idWorkspace}}/projects
-    When execute method GET
-    Then the status code should be 200
-    And response should be $.[0].id = 653870f6ebc39b75386e105e
-
-  @CreateProyect #En Otro Feature
-  Scenario Outline: Agregar nuevo proyecto a Workspace
-    Given call clockify.feature@GetWorkspaces
-    Given endpoint /v1/workspaces/{{idWorkspace}}/projects
-    And set value "<nameProyect>" of key name in body addProyectWorkspace.json
+    And set value "ProyectoDelete" of key name in body addProyectWorkspace.json
     When execute method POST
     Then the status code should be 201
-    And response should be $.name = <nameProyect>
     * define idProyect = $.id
 
-    Examples:
-      | nameProyect |
-      | Proyecto18  |
-
-  @getProyect #en otro feature
-  Scenario: Obtener proyecto existente
-    Given call clockify.feature@GetWorkspaces
-    Given call clockify.feature@CreateProyect
-    Given endpoint /v1/workspaces/{{idWorkspace}}/projects/{{idProyect}}
-    When execute method GET
-    Then the status code should be 200
-    And response should be $.id = {{idProyect}}
-
-  @updateProyectAux #no borrar
+  @updateProyectAux
   Scenario: Modificar proyecto existente
     Given call clockify.feature@GetWorkspaces
-    Given call clockify.feature@CreateProyect
+    Given call clockify.feature@CreateProyectAux
     Given endpoint /v1/workspaces/{{idWorkspace}}/projects/{{idProyect}}
     And body updateProyect.json
     When execute method PUT
     Then the status code should be 200
-    And response should be $.archived = true
 
-  @deleteProyect
-  Scenario: Eliminar proyecto existente
-    Given call clockify.feature@updateProyectAux
-    Given endpoint /v1/workspaces/{{idWorkspace}}/projects/{{idProyect}}
-    When execute method DELETE
-    Then the status code should be 200
-    And response should be $.id = {{idProyect}}
-    #Este test corre @getWorkspace, @CreateProyect,y @UpdateProyect
 
 
 
